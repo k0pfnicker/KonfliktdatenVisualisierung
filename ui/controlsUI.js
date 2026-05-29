@@ -64,7 +64,7 @@ export function setMode(mode, appState, worldRoot, callbacks) {
     if (regionAvailability) regionAvailability.textContent = "2D: alle Regionen sichtbar";
     if (mode3dBtn)          mode3dBtn.disabled = false;
     if (mode2dBtn)          mode2dBtn.disabled = true;
-    controls.enableRotate = false;
+    controls.enableRotate = true; // Changed to true: Allow orbiting the 2D plane in 3D space
     camera.position.set(0, 0, 400);
     controls.target.set(0, 0, 0);
     camera.lookAt(0, 0, 0);
