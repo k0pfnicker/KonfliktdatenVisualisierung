@@ -1,0 +1,11 @@
+Dataset Metadata
+
+Source: Armed Conflict Location & Event Data Project (ACLED)
+Website: https://acleddata.com/
+Citation: Armed Conflict Location & Event Data Project (ACLED); www.acleddata.com.
+
+Description:
+The CSV files in this directory contain highly aggregated, downsampled, and summarized extracts of the raw ACLED dataset. These files were specifically generated for use within the "KonfliktdatenVisualisierung" WebXR project to optimize 3D rendering performance.
+
+Usage:
+These aggregated files are provided strictly for academic, non-commercial use in conjunction with this project. Raw data is not provided. To access the full, raw datasets for your own research, please register and download them directly from the ACLED Access Portal.

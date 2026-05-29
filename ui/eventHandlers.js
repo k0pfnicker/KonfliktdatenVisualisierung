@@ -1,0 +1,214 @@
+import {
+  yearSlider, timeRangeStartSlider, timeRangeEndSlider,
+  mode3dBtn, mode2dBtn, arBtn, desktopDebugBtn,
+  playPauseBtn, metricSelect, regionSelect,
+  uiToggleBtn,
+} from "./uiElements.js";
+import { renderer, raycaster, mouse, reference2DGroup, camera, controls } from "../core/sceneSetup.js";
+import { markUserInteraction } from "../core/idleRotation.js";
+import { setMode, updateDesktopDebugUI } from "./controlsUI.js";
+import { setPlayback } from "./playbackUI.js";
+import { commitTimeRangeSelection } from "./timeRangeUI.js";
+import { onRegionSelectChange } from "./regionSelectUI.js";
+import { getSelectedRangeYears, getSelectedYearFromSlider } from "../dataLayer.js";
+import {
+  update3DLabel,
+  closeFocusPod,
+  openFocusPod,
+  renderCurrentView,
+  renderForYear,
+  renderCountryInsight,
+} from "../rendering/viewController.js";
+
+/**
+ * Wire up all event listeners for the application.
+ * @param {object} appState
+ * @param {THREE.Group} worldRoot
+ * @param {object} callbacks  — { syncYearSliderValueLabel, updateTemporalControlVisibility,
+ *                               clear2DOverlay, startArSession }
+ */
+export function registerEventHandlers(appState, worldRoot, callbacks) {
+  const {
+    syncYearSliderValueLabel,
+    updateTemporalControlVisibility,
+    clear2DOverlay,
+    startArSession,
+  } = callbacks;
+
+  // Shared setMode wrapper with all required deps
+  function doSetMode(mode) {
+    setMode(mode, appState, worldRoot, {
+      markUserInteraction,
+      updateTemporalControlVisibility: () => updateTemporalControlVisibility(appState),
+      updateDesktopDebugUI: () => updateDesktopDebugUI(appState),
+      renderCurrentView,
+      clear2DOverlay,
+    });
+  }
+
+  // ─── Year slider ───────────────────────────────────────────────────────────
+  yearSlider.addEventListener("input", () => {
+    markUserInteraction();
+    setPlayback(false, appState);
+    appState.autoFollowLatest = false;
+    if (!appState.selectedRegion) {
+      const yearIndex = Number.parseInt(yearSlider.value, 10) || 0;
+      const year = appState.yearKeys[yearIndex] ?? null;
+      if (year !== null) {
+        renderForYear(year);
+        syncYearSliderValueLabel();
+      }
+    }
+  });
+
+  // ─── Time range sliders ────────────────────────────────────────────────────
+  timeRangeStartSlider.addEventListener("input", () => {
+    markUserInteraction();
+    if (!appState.selectedRegion) return;
+    setPlayback(false, appState);
+    appState.autoFollowLatest = false;
+    const sVal = Number.parseInt(timeRangeStartSlider.value, 10) || 0;
+    const eVal = Number.parseInt(timeRangeEndSlider.value, 10) || 0;
+    if (sVal >= eVal) timeRangeStartSlider.value = String(Math.max(0, eVal - 1));
+    commitTimeRangeSelection();
+  });
+
+  timeRangeEndSlider.addEventListener("input", () => {
+    markUserInteraction();
+    if (!appState.selectedRegion) return;
+    setPlayback(false, appState);
+    appState.autoFollowLatest = false;
+    const sVal = Number.parseInt(timeRangeStartSlider.value, 10) || 0;
+    const eVal = Number.parseInt(timeRangeEndSlider.value, 10) || 0;
+    if (eVal <= sVal) {
+      timeRangeEndSlider.value = String(
+        Math.min(timeRangeEndSlider.max ? Number.parseInt(timeRangeEndSlider.max, 10) || eVal : eVal, sVal + 1),
+      );
+    }
+    commitTimeRangeSelection();
+  });
+
+  // Fallback for browser change events on sliders
+  document.addEventListener("input", (event) => {
+    markUserInteraction();
+    if (event.target === timeRangeStartSlider || event.target === timeRangeEndSlider) {
+      if (!appState.selectedRegion) return;
+      commitTimeRangeSelection();
+    }
+  });
+  document.addEventListener("change", (event) => {
+    markUserInteraction();
+    if (event.target === timeRangeStartSlider || event.target === timeRangeEndSlider) {
+      if (!appState.selectedRegion) return;
+      commitTimeRangeSelection();
+    }
+  });
+
+  // ─── Mode buttons ──────────────────────────────────────────────────────────
+  mode3dBtn.addEventListener("click", () => doSetMode("3d"));
+  mode2dBtn.addEventListener("click", () => doSetMode("2d"));
+
+  // ─── AR button ────────────────────────────────────────────────────────────
+  arBtn.addEventListener("click", () => {
+    markUserInteraction();
+    if (appState.arSessionActive) {
+      renderer.xr.getSession()?.end();
+      return;
+    }
+    startArSession();
+  });
+
+  // ─── Desktop debug ────────────────────────────────────────────────────────
+  desktopDebugBtn.addEventListener("click", () => {
+    markUserInteraction();
+    appState.desktopDebug = !appState.desktopDebug;
+    if (appState.desktopDebug) doSetMode("3d");
+    updateDesktopDebugUI(appState);
+    renderCurrentView();
+  });
+
+  // ─── Play/pause ───────────────────────────────────────────────────────────
+  playPauseBtn.addEventListener("click", () => {
+    markUserInteraction();
+    if (!appState.yearKeys.length) return;
+    setPlayback(!appState.isPlaying, appState);
+  });
+
+  // ─── Metric select ────────────────────────────────────────────────────────
+  metricSelect.addEventListener("change", () => {
+    markUserInteraction();
+    setPlayback(false, appState);
+    appState.metric = metricSelect.value;
+    renderCurrentView();
+  });
+
+  // ─── Region select ────────────────────────────────────────────────────────
+  regionSelect.addEventListener("change", () => {
+    onRegionSelectChange(appState, syncYearSliderValueLabel);
+  });
+
+  // ─── UI toggle ────────────────────────────────────────────────────────────
+  if (uiToggleBtn) {
+    uiToggleBtn.addEventListener("click", () => {
+      document.body.classList.toggle("controls-collapsed");
+    });
+  }
+
+  // ─── Canvas click (country selection) ─────────────────────────────────────
+  renderer.domElement.addEventListener("click", (e) => {
+    markUserInteraction();
+    if (appState.mode === "2d") return;
+    
+    const rect = renderer.domElement.getBoundingClientRect();
+    mouse.x = ((e.clientX - rect.left) / rect.width) * 2 - 1;
+    mouse.y = -((e.clientY - rect.top) / rect.height) * 2 + 1;
+
+    raycaster.setFromCamera(mouse, camera);
+    const hitTargets = appState.mode === "2d"
+      ? reference2DGroup.children
+      : appState.barMeshes.flatMap((mesh) => (mesh.userData?.hitProxy ? [mesh, mesh.userData.hitProxy] : [mesh]));
+    const hits = raycaster.intersectObjects(hitTargets, false);
+
+    if (!hits.length) {
+      appState.selectedCountry = null;
+      update3DLabel(null);
+      closeFocusPod();
+      if (appState.mode === "2d") clear2DOverlay();
+      renderCurrentView();
+      return;
+    }
+
+    const pickedMesh = hits[0].object;
+    const resolved   = pickedMesh.userData?.hitTarget ?? pickedMesh;
+    const d = resolved.userData;
+    appState.selectedCountry = d.country;
+
+    if (appState.mode === "2d") {
+      renderCurrentView();
+    } else if (appState.selectedRegion) {
+      renderCurrentView();
+      update3DLabel(null);
+      const years = getSelectedRangeYears();
+      openFocusPod(d.country, years);
+    } else {
+      const year = getSelectedYearFromSlider();
+      if (year) renderCountryInsight(year, d.country);
+      update3DLabel(null);
+      openFocusPod(d.country, year ? [year] : [Number(d.year)]);
+    }
+  });
+
+  // ─── Window + controls passthrough ────────────────────────────────────────
+  window.addEventListener("resize", () => {
+    camera.aspect = window.innerWidth / window.innerHeight;
+    camera.updateProjectionMatrix();
+    renderer.setSize(window.innerWidth, window.innerHeight);
+  });
+
+  renderer.domElement.addEventListener("pointerdown", markUserInteraction);
+  renderer.domElement.addEventListener("wheel", markUserInteraction, { passive: true });
+  window.addEventListener("keydown", markUserInteraction);
+
+  controls.addEventListener("start",  markUserInteraction);
+  controls.addEventListener("change", markUserInteraction);
+}

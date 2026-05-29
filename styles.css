@@ -1,0 +1,508 @@
+html,
+body {
+  margin: 0;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  background: transparent;
+  color: #e2e8f0;
+}
+
+#container {
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+}
+#ui {
+  position: absolute;
+  top: 165px;
+  left: 15px;
+  z-index: 2;
+  color: #f8fafc;
+  background: rgba(15, 23, 42, 0.65);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  padding: 16px;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  min-width: 340px;
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
+}
+body.controls-collapsed #ui {
+  display: none;
+}
+
+#uiToggleBtn {
+  display: block;
+  position: static;
+  align-self: flex-start;
+  z-index: 6;
+  cursor: pointer;
+  padding: 10px 12px;
+  background: rgba(15, 23, 42, 0.9);
+  color: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 10px;
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.45);
+}
+
+.screen-strip {
+  position: fixed;
+  left: 12px;
+  right: 12px;
+  z-index: 5;
+  pointer-events: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.ui-toggle-inline {
+  display: inline-block;
+  margin-top: 6px;
+  pointer-events: auto;
+}
+.screen-strip-top {
+  top: 12px;
+  align-items: flex-start;
+  max-width: 520px;
+}
+
+.screen-strip-bottom {
+  bottom: 12px;
+  align-items: center;
+}
+
+.screen-strip-label {
+  display: inline-flex;
+  align-self: flex-start;
+  padding: 3px 8px;
+  border-radius: 999px;
+  background: rgba(15, 23, 42, 0.72);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: #cbd5e1;
+  font-size: 11px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.top-region-row,
+.year-control,
+.range-block {
+  pointer-events: auto;
+  background: rgba(15, 23, 42, 0.7);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 14px;
+  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.36);
+}
+
+.top-region-row {
+  margin-top: 0;
+  padding: 10px 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 4px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.region-select-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+}
+
+.region-inline-label {
+  margin: 0;
+}
+
+.top-region-row select {
+  min-width: 220px;
+  flex: 1;
+}
+
+#regionAvailability {
+  width: 100%;
+  max-width: 520px;
+  padding-left: 2px;
+}
+
+.year-control,
+.range-block {
+  padding: 12px;
+}
+
+.year-control {
+  width: 100%;
+  max-width: 520px;
+}
+
+.range-block {
+  width: 100%;
+  max-width: 520px;
+}
+
+.screen-strip-bottom > .year-control,
+.screen-strip-bottom > .range-block {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.control-toast {
+  position: fixed;
+  left: 50%;
+  bottom: 88px;
+  transform: translateX(-50%) translateY(8px);
+  z-index: 7;
+  opacity: 0;
+  pointer-events: none;
+  padding: 10px 14px;
+  max-width: min(92vw, 420px);
+  border-radius: 999px;
+  border: 1px solid rgba(96, 165, 250, 0.3);
+  background: rgba(15, 23, 42, 0.92);
+  color: #dbeafe;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.42);
+  transition: opacity 0.18s ease, transform 0.18s ease;
+}
+
+.control-toast.visible {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+#ui strong {
+  color: #fff;
+  font-size: 1.1em;
+}
+
+.subheading {
+  margin-top: 6px;
+  font-size: 13px;
+}
+
+.mt-6 {
+  margin-top: 6px;
+}
+
+.mt-8 {
+  margin-top: 8px;
+}
+
+.label-sm {
+  font-size: 13px;
+}
+
+#yearSlider {
+  width: 100%;
+  cursor: pointer;
+  accent-color: #3b82f6;
+}
+
+.toggle-row {
+  display: flex;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.toggle-row button,
+select {
+  cursor: pointer;
+  padding: 6px 12px;
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 6px;
+  transition: all 0.2s;
+}
+
+.toggle-row button:hover,
+select:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.toggle-row button.active {
+  background: #10b981;
+  border-color: #10b981;
+  color: #042f2e;
+  font-weight: 700;
+}
+
+.toggle-row button:disabled {
+  background: #3b82f6;
+  color: #fff;
+  border-color: #3b82f6;
+  cursor: default;
+}
+
+.toggle-row button.locked {
+  background: rgba(59, 130, 246, 0.28);
+  border-color: rgba(147, 197, 253, 0.5);
+  color: #dbeafe;
+  cursor: not-allowed;
+  opacity: 0.72;
+}
+
+select option {
+  background: #1e293b;
+  color: #fff;
+}
+
+#legend {
+  margin-top: 12px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  padding-top: 10px;
+  font-size: 13px;
+  color: #cbd5e1;
+}
+
+#legendScale {
+  height: 12px;
+  border-radius: 6px;
+  background: linear-gradient(90deg, #3b82f6, #f59e0b, #ef4444);
+  margin-top: 6px;
+}
+
+#legendRange {
+  margin-top: 6px;
+  font-variant-numeric: tabular-nums;
+}
+
+#insight {
+  margin-top: 12px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  padding-top: 10px;
+  font-size: 13px;
+  color: #cbd5e1;
+  max-width: 360px;
+}
+
+#insightTitle {
+  font-weight: 700;
+  color: #fff;
+  margin-bottom: 6px;
+}
+
+#insightList {
+  margin: 6px 0 0;
+  padding-left: 18px;
+  line-height: 1.5;
+}
+
+#insightHint {
+  margin-top: 8px;
+  font-size: 11px;
+  color: #64748b;
+}
+
+.range-block {
+  margin-top: 8px;
+}
+
+.range-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin-top: 6px;
+}
+
+.range-label {
+  font-size: 12px;
+  color: #cbd5e1;
+  margin-bottom: 4px;
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.time-range-label {
+  position: relative;
+  margin-top: 4px;
+}
+
+.year-slider-value {
+  font-size: 12px;
+  color: #cbd5e1;
+  text-align: center;
+  margin-top: 4px;
+}
+
+.range-status {
+  margin-top: 6px;
+  font-size: 12px;
+  color: #93c5fd;
+}
+
+.section-title {
+  font-size: 13px;
+}
+
+/* Dual-handle range look: two overlapping inputs with JS-painted track */
+.dual-range {
+  position: relative;
+  height: 24px;
+  margin-top: 6px;
+}
+
+.dual-track {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 9px;
+  height: 6px;
+  border-radius: 999px;
+  background: #334155;
+}
+
+.dual-fill {
+  position: absolute;
+  top: 0;
+  height: 6px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #60a5fa, #93c5fd);
+  box-shadow: 0 0 10px rgba(96, 165, 250, 0.35);
+}
+
+.dual-thumb {
+  position: absolute;
+  top: 1px;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: #f8fafc;
+  border: 2px solid #93c5fd;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.45);
+  transform: translateX(-50%);
+  cursor: ew-resize;
+  touch-action: none;
+}
+
+.dual-thumb.end {
+  border-color: #60a5fa;
+}
+
+.dual-range input[type=range].dual {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.etype-row {
+  margin-top: 4px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.etype-pill {
+  display: inline-block;
+  padding: 3px 8px;
+  border-radius: 999px;
+  color: #000;
+  font-weight: 600;
+  font-size: 11px;
+  border: none;
+  white-space: nowrap;
+  box-shadow: 0 0 8px rgba(255, 255, 255, 0.2);
+}
+
+.debug-status {
+  margin-top: 8px;
+  padding: 8px 10px;
+  border-radius: 8px;
+  font-size: 12px;
+  line-height: 1.45;
+  color: #dbeafe;
+  background: rgba(59, 130, 246, 0.12);
+  border: 1px solid rgba(96, 165, 250, 0.28);
+}
+
+.region-availability {
+  margin-top: 6px;
+  font-size: 12px;
+  color: #93c5fd;
+}
+
+.play-status {
+  margin-top: 4px;
+  font-size: 12px;
+  color: #93c5fd;
+}
+
+.year-label {
+  margin-top: 6px;
+  font-size: 13px;
+}
+
+.info-text {
+  margin-top: 4px;
+  font-size: 12px;
+  color: #555;
+}
+
+@media (max-width: 900px) {
+  #ui {
+    left: 10px;
+    right: 10px;
+    top: 74px;
+    width: auto;
+    min-width: 0;
+    max-height: 42vh;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    padding: 12px;
+  }
+
+  .subheading,
+  .ar-row,
+  .desktop-row,
+  #arStatus,
+  #debugStatus,
+  #legend,
+  #insight,
+  #playStatus {
+    display: none !important;
+  }
+
+  .mode-row,
+  .metric-row {
+    display: flex;
+    flex-wrap: wrap;
+  }
+
+  .top-region-row {
+    min-width: 0;
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .screen-strip-top {
+    max-width: none;
+  }
+
+  .top-region-row select {
+    width: 100%;
+    min-width: 0;
+  }
+
+  .screen-strip {
+    left: 10px;
+    right: 10px;
+  }
+
+  .screen-strip-bottom {
+    bottom: 10px;
+  }
+
+  .control-toast {
+    bottom: 86px;
+  }
+
+  #uiToggleBtn {
+    display: block;
+    margin-top: 6px;
+  }
+}

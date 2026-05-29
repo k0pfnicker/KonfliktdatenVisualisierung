@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="de">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Simple Conflict Bars</title>
+  <link rel="stylesheet" href="./styles.css">
+</head>
+
+<body>
+  <div id="container"></div>
+  <div id="topControls" class="screen-strip screen-strip-top">
+    <div class="region-group">
+      <div class="toggle-row region-row top-region-row">
+        <div class="region-select-row">
+          <label for="regionSelect" class="screen-strip-label">Region</label>
+          <select id="regionSelect">
+            <option value="">Alle Regionen</option>
+          </select>
+        </div>
+        <div id="regionAvailability" class="region-availability">Verfügbarer Zeitraum: -</div>
+      </div>
+    </div>
+    <button id="uiToggleBtn" type="button" class="ui-toggle-inline">Controls</button>
+  </div>
+  <div id="bottomControls" class="screen-strip screen-strip-bottom">
+    <div class="year-control" id="yearControl">
+      <div class="screen-strip-label">Jahr</div>
+      <input id="yearSlider" type="range" min="0" max="0" step="1" value="0" aria-label="Jahr">
+      <div class="year-slider-value" id="yearSliderValue">-</div>
+    </div>
+    <div class="range-block" id="timeRangeBlock">
+      <div class="screen-strip-label">Zeitraum</div>
+      <div class="dual-range" id="dualRangeContainer">
+        <div class="dual-track" id="dualRangeTrack">
+          <div class="dual-fill" id="dualRangeFill"></div>
+        </div>
+        <div class="dual-thumb start" id="timeRangeStartThumb" aria-hidden="true"></div>
+        <div class="dual-thumb end" id="timeRangeEndThumb" aria-hidden="true"></div>
+        <input id="timeRangeStartSlider" class="dual" type="range" min="0" max="0" step="1" value="0" disabled>
+        <input id="timeRangeEndSlider" class="dual" type="range" min="0" max="0" step="1" value="0" disabled>
+      </div>
+      <div class="range-label time-range-label">
+        <div>Start: <span id="timeRangeStartLabel">-</span></div>
+        <div>Ende: <span id="timeRangeEndLabel">-</span></div>
+      </div>
+    </div>
+  </div>
+  <div id="controlToast" class="control-toast" aria-live="polite"></div>
+  <div id="acledAttribution"
+    style="position: absolute; bottom: 8px; right: 8px; color: rgba(255,255,255,0.4); font-size: 10px; font-family: sans-serif; pointer-events: none; z-index: 1000;">
+    Data: Armed Conflict Location &amp; Event Data Project (ACLED); acleddata.com
+  </div>
+  <div id="ui">
+    <div><strong>Conflict Prototype</strong></div>
+    <div class="subheading">Globale Visualisierung nach Events und Fatalities.</div>
+    <div class="toggle-row mode-row">
+      <button id="mode3dBtn" type="button">3D</button>
+      <button id="mode2dBtn" type="button">2D</button>
+      <button id="playPauseBtn" type="button">Start/Stop</button>
+    </div>
+    <div class="toggle-row ar-row mt-6">
+      <button id="arBtn" type="button">AR starten</button>
+    </div>
+    <div id="arStatus" class="debug-status">AR wird geprueft...</div>
+    <div class="toggle-row metric-row mt-6">
+      <label for="metricSelect" class="label-sm">Metrik</label>
+      <select id="metricSelect">
+        <option selected="selected" value="events">Events</option>
+        <option value="fatalities">Fatalities</option>
+      </select>
+    </div>
+    <div class="toggle-row desktop-row mt-6">
+      <button id="desktopDebugBtn" type="button">Desktop Debug: Off</button>
+    </div>
+  </div>
+
+  <script type="importmap">
+  {
+    "imports": {
+      "three": "./vendor/three/build/three.module.js",
+      "three/addons/": "./vendor/three/examples/jsm/"
+    }
+  }
+  </script>
+  <script>
+    const script = document.createElement('script');
+    script.type = 'module';
+    script.src = './app.js?v=' + Date.now();
+    document.body.appendChild(script);
+  </script>
+</body>
+
+</html>
