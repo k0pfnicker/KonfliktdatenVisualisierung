@@ -106,8 +106,7 @@ export function aggregateRowsForYears(years) {
 
 export function getTopRowsForYears(years) {
   return Array.from(aggregateRowsForYears(years).values())
-    .sort((a, b) => getMetricValue(b) - getMetricValue(a))
-    .slice(0, 100);
+    .sort((a, b) => getMetricValue(b) - getMetricValue(a));
 }
 
 export function getCountryAggregateForYears(years, country) {
