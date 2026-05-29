@@ -39,3 +39,6 @@ export const legendTitle          = document.getElementById("legendTitle");
 export const legendRange          = document.getElementById("legendRange");
 export const insightTitle         = document.getElementById("insightTitle");
 export const insightList          = document.getElementById("insightList");
+export const legendToggleBtn      = document.getElementById("legendToggleBtn");
+export const legendPanel          = document.getElementById("legendPanel");
+export const legend2DInfo         = document.getElementById("legend2DInfo");

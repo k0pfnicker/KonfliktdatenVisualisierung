@@ -25,6 +25,16 @@
     <button id="uiToggleBtn" type="button" class="ui-toggle-inline">Controls</button>
   </div>
   <div id="bottomControls" class="screen-strip screen-strip-bottom">
+    <button id="legendToggleBtn" type="button" class="ui-toggle-inline" style="align-self: flex-start; margin-bottom: 4px; padding: 6px 12px; background: rgba(15, 23, 42, 0.9); color: #fff; border: 1px solid rgba(255, 255, 255, 0.2); border-radius: 10px; cursor: pointer; box-shadow: 0 4px 18px rgba(0, 0, 0, 0.45);">Legende ▼</button>
+    <div id="legendPanel" style="display: none; width: 100%; max-width: 520px; margin-bottom: 8px;" class="year-control">
+       <div id="legendTitle" class="section-title" style="font-weight: bold; color: #fff;">Legende</div>
+       <div id="legendScale"></div>
+       <div id="legendRange" style="margin-top: 6px; font-variant-numeric: tabular-nums; font-size: 13px;">-</div>
+       <div id="legend2DInfo" style="display: none; margin-top: 8px; font-size: 12px; color: #cbd5e1; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 6px;">
+         <strong>2D-Ansicht:</strong> Partikelfarbe basiert auf Opferzahlen.<br>
+         <span style="color:#fcd34d;">Gelb</span> = Gering | <span style="color:#ef4444;">Rot</span> = Hoch
+       </div>
+    </div>
     <div class="year-control" id="yearControl">
       <div class="screen-strip-label">Jahr</div>
       <input id="yearSlider" type="range" min="0" max="0" step="1" value="0" aria-label="Jahr">

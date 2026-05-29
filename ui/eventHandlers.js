@@ -2,7 +2,7 @@ import {
   yearSlider, timeRangeStartSlider, timeRangeEndSlider,
   mode3dBtn, mode2dBtn, arBtn, desktopDebugBtn,
   playPauseBtn, metricSelect, regionSelect,
-  uiToggleBtn,
+  uiToggleBtn, legendToggleBtn, legendPanel
 } from "./uiElements.js";
 import { renderer, raycaster, mouse, reference2DGroup, camera, controls } from "../core/sceneSetup.js";
 import { markUserInteraction } from "../core/idleRotation.js";
@@ -151,6 +151,19 @@ export function registerEventHandlers(appState, worldRoot, callbacks) {
   if (uiToggleBtn) {
     uiToggleBtn.addEventListener("click", () => {
       document.body.classList.toggle("controls-collapsed");
+    });
+  }
+
+  // ─── Legend toggle ─────────────────────────────────────────────────────────
+  if (legendToggleBtn && legendPanel) {
+    legendToggleBtn.addEventListener("click", () => {
+      if (legendPanel.style.display === "none") {
+        legendPanel.style.display = "block";
+        legendToggleBtn.textContent = "Legende ▲";
+      } else {
+        legendPanel.style.display = "none";
+        legendToggleBtn.textContent = "Legende ▼";
+      }
     });
   }
 

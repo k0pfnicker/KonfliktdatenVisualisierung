@@ -52,6 +52,17 @@ export function setMode(mode, appState, worldRoot, callbacks) {
     if (mode2dBtn)    mode2dBtn.disabled = false;
     controls.enableRotate = true;
     haloMesh.visible = true;
+    
+    const subheading = document.querySelector(".subheading");
+    if (subheading) subheading.textContent = "Globale Visualisierung nach Events und Fatalities.";
+    const legendTitle = document.getElementById("legendTitle");
+    const legendScale = document.getElementById("legendScale");
+    const legendRange = document.getElementById("legendRange");
+    const legend2DInfo = document.getElementById("legend2DInfo");
+    if (legendTitle) legendTitle.style.display = "block";
+    if (legendScale) legendScale.style.display = "block";
+    if (legendRange) legendRange.style.display = "block";
+    if (legend2DInfo) legend2DInfo.style.display = "none";
   } else {
     if (earthModel) earthModel.visible = false;
     if (map2D)      map2D.visible = true;
@@ -72,6 +83,17 @@ export function setMode(mode, appState, worldRoot, callbacks) {
     haloMesh.visible = false;
     closeFocusPod();
     update3DLabel(null);
+
+    const subheading = document.querySelector(".subheading");
+    if (subheading) subheading.textContent = "2D Partikelschwarm-Visualisierung einzelner Konfliktereignisse.";
+    const legendTitle = document.getElementById("legendTitle");
+    const legendScale = document.getElementById("legendScale");
+    const legendRange = document.getElementById("legendRange");
+    const legend2DInfo = document.getElementById("legend2DInfo");
+    if (legendTitle) legendTitle.style.display = "none";
+    if (legendScale) legendScale.style.display = "none";
+    if (legendRange) legendRange.style.display = "none";
+    if (legend2DInfo) legend2DInfo.style.display = "block";
   }
 
   callbacks.updateTemporalControlVisibility();
