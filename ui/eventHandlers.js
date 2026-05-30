@@ -114,7 +114,7 @@ export function registerEventHandlers(appState, worldRoot, callbacks) {
       renderer.xr.getSession()?.end();
       return;
     }
-    startArSession();
+    callbacks.startArSession();
   });
 
   // ─── AR Warning Popup ───────────────────────────────────────────────────────
