@@ -101,6 +101,7 @@ export async function startArSession(appState, worldRoot) {
       renderCurrentView();
     }, { once: true });
 
+    renderer.xr.setReferenceSpaceType("local");
     await renderer.xr.setSession(session);
     renderCurrentView();
   } catch (err) {
