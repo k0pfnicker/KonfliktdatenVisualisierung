@@ -4,7 +4,7 @@ import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
 
 // ─── Scene ────────────────────────────────────────────────────────────────────
 export const scene = new THREE.Scene();
-scene.background = null;
+scene.background = new THREE.Color(0x020617);
 
 // ─── Camera ───────────────────────────────────────────────────────────────────
 export const camera = new THREE.PerspectiveCamera(
@@ -25,6 +25,8 @@ renderer.xr.enabled = true;
 export const controls = new OrbitControls(camera, renderer.domElement);
 controls.enableDamping = true;
 controls.dampingFactor = 0.05;
+controls.minDistance = 105; // Prevents clipping inside the globe (radius is 100)
+controls.maxDistance = 800; // Prevents zooming out too far into the void
 
 // ─── Lights ───────────────────────────────────────────────────────────────────
 export const ambient = new THREE.AmbientLight(0x404040, 2);

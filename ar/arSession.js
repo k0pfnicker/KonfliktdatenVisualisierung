@@ -1,5 +1,6 @@
 import { arBtn, arWarningContainer, arWarningPopup } from "../ui/uiElements.js";
-import { renderer, controls } from "../core/sceneSetup.js";
+import { renderer, controls, scene } from "../core/sceneSetup.js";
+import * as THREE from "three";
 import { updateArPresentation } from "../ui/controlsUI.js";
 import { setPlayback } from "../ui/playbackUI.js";
 import { renderCurrentView } from "../rendering/viewController.js";
@@ -91,6 +92,7 @@ export async function startArSession(appState, worldRoot) {
     if (mode2d) mode2d.disabled = true;
     if (mode3d) mode3d.disabled = true;
     controls.enabled = false;
+    scene.background = null;
 
     session.addEventListener("end", () => {
       appState.arSessionActive = false;
@@ -98,6 +100,7 @@ export async function startArSession(appState, worldRoot) {
       if (mode2d) mode2d.disabled = false;
       if (mode3d) mode3d.disabled = false;
       controls.enabled = true;
+      scene.background = new THREE.Color(0x020617);
 
       updateArSupportState(appState);
       renderCurrentView();
@@ -108,6 +111,7 @@ export async function startArSession(appState, worldRoot) {
   } catch (err) {
     console.error("AR session failed", err);
     appState.arSessionActive = false;
+    scene.background = new THREE.Color(0x020617);
     updateArSupportState(appState);
   }
 }
