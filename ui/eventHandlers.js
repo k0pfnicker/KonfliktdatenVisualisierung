@@ -122,12 +122,13 @@ export function registerEventHandlers(appState, worldRoot, callbacks) {
       markUserInteraction();
       if (!appState.arSessionActive || !worldRoot) return;
 
-      // Snap worldRoot to be 2.5 meters strictly in front of the current camera position
+      // Snap worldRoot to be 2.5 meters strictly in front of the current physical device position
+      const xrCamera = renderer.xr.getCamera(camera);
       const distance = 2.5;
       const direction = new THREE.Vector3(0, 0, -1);
-      direction.applyQuaternion(camera.quaternion);
+      direction.applyQuaternion(xrCamera.quaternion);
 
-      worldRoot.position.copy(camera.position).add(direction.multiplyScalar(distance));
+      worldRoot.position.copy(xrCamera.position).add(direction.multiplyScalar(distance));
       worldRoot.position.y -= 0.2; // Keep it slightly lowered for comfortable viewing
     });
   }
