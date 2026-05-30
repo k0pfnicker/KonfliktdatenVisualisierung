@@ -13,9 +13,9 @@ body {
 }
 #ui {
   position: absolute;
-  top: 165px;
+  top: 130px;
   left: 15px;
-  z-index: 2;
+  z-index: 10;
   color: #f8fafc;
   background: rgba(15, 23, 42, 0.65);
   backdrop-filter: blur(12px);
@@ -67,7 +67,7 @@ body.controls-collapsed #ui {
 }
 
 .screen-strip-bottom {
-  bottom: 12px;
+  bottom: 20px;
   align-items: center;
 }
 
@@ -86,7 +86,8 @@ body.controls-collapsed #ui {
 
 .top-region-row,
 .year-control,
-.range-block {
+.range-block,
+#legendPanel {
   pointer-events: auto;
   background: rgba(15, 23, 42, 0.7);
   backdrop-filter: blur(12px);
@@ -94,6 +95,7 @@ body.controls-collapsed #ui {
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 14px;
   box-shadow: 0 8px 28px rgba(0, 0, 0, 0.36);
+  box-sizing: border-box;
 }
 
 .top-region-row {
@@ -104,7 +106,6 @@ body.controls-collapsed #ui {
   align-items: flex-start;
   gap: 4px;
   width: 100%;
-  box-sizing: border-box;
 }
 
 .region-select-row {
