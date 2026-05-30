@@ -93,8 +93,8 @@ export function mountRendererAndLoadGlobe(container) {
     const mapWidth  = 2 * Math.PI * globeRadius;
     const mapHeight = Math.PI * globeRadius;
     const geometry = new THREE.PlaneGeometry(mapWidth, mapHeight, 32, 32);
-    // Darken the background slightly so glowing particles pop out beautifully
-    const material = new THREE.MeshBasicMaterial({ map: texture, side: THREE.DoubleSide, color: 0x888888 });
+    // Darken the background significantly so glowing particles (especially yellow ones) pop out beautifully against the yellow desert
+    const material = new THREE.MeshBasicMaterial({ map: texture, side: THREE.DoubleSide, color: 0x444444 });
     const plane = new THREE.Mesh(geometry, material);
     plane.position.z = -1; // sit slightly behind particles
     map2D.clear();

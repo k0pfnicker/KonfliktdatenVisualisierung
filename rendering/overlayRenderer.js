@@ -78,11 +78,12 @@ function getSwarmMaterial() {
           float alpha = smoothstep(0.5, 0.1, dist);
           
           // Color gradient based on intensity: Yellow -> Intense Red
-          vec3 colorLow = vec3(1.0, 0.8, 0.1);
+          vec3 colorLow = vec3(1.0, 0.9, 0.3); // Bright, vivid yellow-white
           vec3 colorHigh = vec3(1.0, 0.1, 0.1);
           vec3 finalColor = mix(colorLow, colorHigh, min(vIntensity / 30.0, 1.0));
           
-          gl_FragColor = vec4(finalColor, alpha * 0.85);
+          // Boost overall alpha to prevent blending out on bright backgrounds
+          gl_FragColor = vec4(finalColor, min(alpha * 1.5, 1.0));
         }
       `
     });
@@ -106,15 +107,32 @@ export function build2DMapOverlay(years) {
     const positions = new Float32Array(particles.length * 3);
     const intensities = new Float32Array(particles.length);
 
+    // First pass: calculate intensities and find max intensity
+    let maxIntensity = 1;
+    for (let i = 0; i < particles.length; i++) {
+      const p = particles[i];
+      // Base intensity heavily on fatalities for maximum impact
+      const intensity = p.fatalitiesTotal > 0 ? p.fatalitiesTotal : (p.eventsTotal * 0.5);
+      intensities[i] = intensity;
+      if (intensity > maxIntensity) maxIntensity = intensity;
+    }
+
+    // Second pass: set positions with Z-elevation based on intensity
     for (let i = 0; i < particles.length; i++) {
       const p = particles[i];
       const pos = projectLatLonTo2D(p.lat, p.lon);
       positions[i * 3 + 0] = pos.x;
       positions[i * 3 + 1] = pos.y;
-      positions[i * 3 + 2] = 0.2; // slight Z offset to float above map
       
-      // We base intensity heavily on fatalities for maximum impact
-      intensities[i] = p.fatalitiesTotal > 0 ? p.fatalitiesTotal : (p.eventsTotal * 0.5);
+      const intensity = intensities[i];
+      // Elevate the particles into a 3D point cloud! Max height is 30 units.
+      const normalizedIntensity = Math.min(intensity / maxIntensity, 1.0);
+      
+      // Use an exponential curve so only truly intense events spike really high,
+      // while standard events float gently above the map.
+      const elevation = 0.2 + Math.pow(normalizedIntensity, 0.4) * 35;
+      
+      positions[i * 3 + 2] = elevation;
     }
 
     const geometry = new THREE.BufferGeometry();
