@@ -33,7 +33,10 @@
         <div id="regionAvailability" class="region-availability">Verfügbarer Zeitraum: -</div>
       </div>
     </div>
-    <button id="uiToggleBtn" type="button" class="ui-toggle-inline">Controls</button>
+    <div style="display: flex; gap: 8px; pointer-events: auto;">
+      <button id="arBtn" type="button" class="ui-toggle-inline ar-btn" style="background: rgba(16, 185, 129, 0.85); display: none;">AR starten</button>
+      <button id="uiToggleBtn" type="button" class="ui-toggle-inline">Controls</button>
+    </div>
     <div id="ui">
       <div><strong>Conflict Prototype</strong></div>
       <div class="subheading">Globale Visualisierung nach Events und Fatalities.</div>
@@ -46,9 +49,7 @@
         <label class="label-sm" style="margin-right: 8px;">Animation:</label>
         <button id="playPauseBtn" type="button">Start/Stop</button>
       </div>
-      <div class="toggle-row ar-row mt-6">
-        <button id="arBtn" type="button">AR starten</button>
-      </div>
+
 
       <div class="toggle-row metric-row mt-6" style="align-items: center;">
         <label class="label-sm" style="margin-right: 8px;">Metrik</label>

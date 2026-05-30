@@ -17,8 +17,8 @@ import { closeFocusPod } from "../rendering/focusPod.js";
 export function updateArPresentation(appState, worldRoot) {
   if (!worldRoot) return;
   if (appState.arSessionActive) {
-    worldRoot.position.set(0, -0.2, -1.6);
-    worldRoot.scale.setScalar(0.012);
+    worldRoot.position.set(0, -0.2, -2.5);
+    worldRoot.scale.setScalar(0.008);
   } else {
     worldRoot.position.set(0, 0, 0);
     worldRoot.scale.setScalar(1);

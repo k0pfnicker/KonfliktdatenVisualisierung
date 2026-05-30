@@ -17,8 +17,7 @@ export async function updateArSupportState(appState) {
     if (arBtn) {
       arBtn.disabled = true;
       arBtn.textContent = "AR nicht verfuegbar";
-      const arRow = arBtn.closest(".ar-row");
-      if (arRow) arRow.style.display = "none";
+      arBtn.style.display = "none";
     }
     if (arWarningContainer) arWarningContainer.style.display = "block";
     if (arWarningPopup) arWarningPopup.textContent = "AR wird von diesem Browser oder Gerät nicht unterstützt.";
@@ -29,8 +28,7 @@ export async function updateArSupportState(appState) {
     appState.arSupported = false;
     arBtn.disabled = true;
     arBtn.textContent = "AR nicht verfuegbar";
-    const arRow = arBtn.closest(".ar-row");
-    if (arRow) arRow.style.display = "none";
+    arBtn.style.display = "none";
     if (arWarningContainer) arWarningContainer.style.display = "block";
     if (arWarningPopup) arWarningPopup.textContent = "AR braucht HTTPS oder localhost. Ein LAN-HTTP-Server reicht für immersive-ar meist nicht aus.";
     return;
@@ -48,10 +46,7 @@ export async function updateArSupportState(appState) {
       ? "AR beenden"
       : appState.arSupported ? "AR starten" : "AR nicht verfuegbar";
       
-    const arRow = arBtn.closest(".ar-row");
-    if (arRow) {
-      arRow.style.display = appState.arSupported || appState.arSessionActive ? "flex" : "none";
-    }
+    arBtn.style.display = appState.arSupported || appState.arSessionActive ? "block" : "none";
   }
   if (arWarningContainer) {
     arWarningContainer.style.display = appState.arSupported || appState.arSessionActive ? "none" : "block";
@@ -73,7 +68,7 @@ export async function startArSession(appState, worldRoot) {
 
   try {
     const session = await navigator.xr.requestSession("immersive-ar", {
-      requiredFeatures: ["local-floor"],
+      requiredFeatures: ["local"],
       optionalFeatures: ["dom-overlay"],
       domOverlay: { root: document.body },
     });

@@ -231,4 +231,36 @@ export function registerEventHandlers(appState, worldRoot, callbacks) {
 
   controls.addEventListener("start", markUserInteraction);
   controls.addEventListener("change", markUserInteraction);
+
+  // ─── AR Manual Rotation ───────────────────────────────────────────────────
+  let isDraggingAR = false;
+  let previousMousePosition = { x: 0, y: 0 };
+
+  renderer.domElement.addEventListener('pointerdown', (e) => {
+    if (!appState.arSessionActive) return;
+    isDraggingAR = true;
+    previousMousePosition = { x: e.clientX, y: e.clientY };
+  });
+
+  renderer.domElement.addEventListener('pointermove', (e) => {
+    if (!appState.arSessionActive || !isDraggingAR) return;
+    
+    const deltaMove = {
+      x: e.clientX - previousMousePosition.x,
+      y: e.clientY - previousMousePosition.y
+    };
+    
+    // Reverse directions to feel natural (drag left -> earth spins left)
+    worldRoot.rotation.y += deltaMove.x * 0.01;
+    worldRoot.rotation.x += deltaMove.y * 0.01;
+    
+    previousMousePosition = { x: e.clientX, y: e.clientY };
+  });
+
+  renderer.domElement.addEventListener('pointerup', () => {
+    isDraggingAR = false;
+  });
+  renderer.domElement.addEventListener('pointerout', () => {
+    isDraggingAR = false;
+  });
 }
