@@ -10,7 +10,7 @@ import { setMode, updateDesktopDebugUI } from "./controlsUI.js";
 import { setPlayback } from "./playbackUI.js";
 import { commitTimeRangeSelection } from "./timeRangeUI.js";
 import { onRegionSelectChange } from "./regionSelectUI.js";
-import { getSelectedRangeYears, getSelectedYearFromSlider } from "../dataLayer.js";
+import { getSelectedRangeYears, getSelectedYearFromSlider, syncSliderBounds } from "../dataLayer.js";
 import {
   update3DLabel,
   closeFocusPod,
@@ -44,6 +44,8 @@ export function registerEventHandlers(appState, worldRoot, callbacks) {
       renderCurrentView,
       clear2DOverlay,
     });
+    syncSliderBounds();
+    syncYearSliderValueLabel();
   }
 
   // ─── Year slider ───────────────────────────────────────────────────────────
@@ -156,10 +158,8 @@ export function registerEventHandlers(appState, worldRoot, callbacks) {
     legendToggleBtn.addEventListener("click", () => {
       if (legendPanel.style.display === "none") {
         legendPanel.style.display = "block";
-        legendToggleBtn.textContent = "Legende ▲";
       } else {
         legendPanel.style.display = "none";
-        legendToggleBtn.textContent = "Legende ▼";
       }
     });
   }
@@ -168,7 +168,7 @@ export function registerEventHandlers(appState, worldRoot, callbacks) {
   renderer.domElement.addEventListener("click", (e) => {
     markUserInteraction();
     if (appState.mode === "2d") return;
-    
+
     const rect = renderer.domElement.getBoundingClientRect();
     mouse.x = ((e.clientX - rect.left) / rect.width) * 2 - 1;
     mouse.y = -((e.clientY - rect.top) / rect.height) * 2 + 1;
@@ -189,7 +189,7 @@ export function registerEventHandlers(appState, worldRoot, callbacks) {
     }
 
     const pickedMesh = hits[0].object;
-    const resolved   = pickedMesh.userData?.hitTarget ?? pickedMesh;
+    const resolved = pickedMesh.userData?.hitTarget ?? pickedMesh;
     const d = resolved.userData;
     appState.selectedCountry = d.country;
 
@@ -219,6 +219,6 @@ export function registerEventHandlers(appState, worldRoot, callbacks) {
   renderer.domElement.addEventListener("wheel", markUserInteraction, { passive: true });
   window.addEventListener("keydown", markUserInteraction);
 
-  controls.addEventListener("start",  markUserInteraction);
+  controls.addEventListener("start", markUserInteraction);
   controls.addEventListener("change", markUserInteraction);
 }

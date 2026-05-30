@@ -135,7 +135,12 @@ function syncYearSliderValueLabel() {
   const yearSliderValue = document.getElementById("yearSliderValue");
   if (!yearSliderValue || !yearSlider) return;
   const idx   = Number.parseInt(yearSlider.value, 10) || 0;
-  const years = state.availableYearsForFilter.length > 0 ? state.availableYearsForFilter : state.yearKeys;
+  
+  let years = state.yearKeys;
+  if (state.mode !== "2d" && state.availableYearsForFilter.length > 0) {
+    years = state.availableYearsForFilter;
+  }
+  
   yearSliderValue.textContent = String(years[idx] ?? "-");
 }
 

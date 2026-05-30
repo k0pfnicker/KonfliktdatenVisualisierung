@@ -31,6 +31,9 @@ export function setDataState(nextState) {
 
 export function getSelectableYears() {
   const appState = globalThis.__webxrState;
+  if (appState?.mode === "2d") {
+    return appState?.yearKeys ?? [];
+  }
   return appState?.selectedRegion ? appState.availableYearsForFilter : appState?.yearKeys ?? [];
 }
 
@@ -196,42 +199,11 @@ export function addParticleRow(row) {
   });
 }
 
-function isParticleInRegion(lat, lon, region) {
-  switch (region) {
-    case 'South America':
-      return lat >= -60 && lat <= 15 && lon >= -95 && lon <= -34;
-    case 'North America':
-      return lat > 15 && lat <= 85 && lon >= -170 && lon <= -50;
-    case 'Europe':
-      return lat >= 35 && lat <= 75 && lon >= -25 && lon <= 45;
-    case 'Middle East':
-      return lat >= 12 && lat <= 42 && lon >= 26 && lon <= 63;
-    case 'Africa':
-      if (lat >= 12 && lat <= 42 && lon >= 35 && lon <= 63) return false;
-      return lat >= -40 && lat <= 38 && lon >= -20 && lon <= 55;
-    case 'Asia':
-      if (lat >= 12 && lat <= 42 && lon >= 26 && lon <= 63) return false;
-      return lat >= -15 && lat <= 85 && lon >= 45 && lon <= 180;
-    default:
-      return true;
-  }
-}
-
 export function getParticlesForYears(years) {
   const particles = [];
-  const region = globalThis.__webxrState?.selectedRegion;
-
   for (const year of years) {
     const yearParticles = globalThis.__webxrState?.particlesByYear?.get(year) || [];
-    if (region) {
-      for (const p of yearParticles) {
-        if (isParticleInRegion(p.lat, p.lon, region)) {
-          particles.push(p);
-        }
-      }
-    } else {
-      particles.push(...yearParticles);
-    }
+    particles.push(...yearParticles);
   }
   return particles;
 }
@@ -332,7 +304,11 @@ export function syncSliderBounds() {
 
   if (yearSlider) {
     yearSlider.min = "0";
-    yearSlider.max = String(Math.max(0, appState.availableYearsForFilter.length - 1));
+    if (appState?.mode === "2d") {
+      yearSlider.max = String(Math.max(0, appState.yearKeys.length - 1));
+    } else {
+      yearSlider.max = String(Math.max(0, appState.availableYearsForFilter.length - 1));
+    }
     yearSlider.step = "1";
   }
 }
