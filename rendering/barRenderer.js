@@ -66,7 +66,9 @@ function renderLegend(selectionLabel, rows) {
   }
   const values = rows.map((row) => getMetricValue(row));
   legendTitle.textContent = `Legende (${getMetricLabel()}) - ${selectionLabel}`;
-  legendRange.textContent = `Niedrig: ${formatNumber(Math.min(...values))} | Hoch: ${formatNumber(Math.max(...values))}`;
+  const positiveValues = values.filter(v => v > 0);
+  const minVal = positiveValues.length > 0 ? Math.min(...positiveValues) : 0;
+  legendRange.textContent = `Niedrig: ${formatNumber(minVal)} | Hoch: ${formatNumber(Math.max(...values))}`;
 }
 
 // ─── Bar clearing ─────────────────────────────────────────────────────────────

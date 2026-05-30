@@ -35,12 +35,10 @@
         <button id="arBtn" type="button">AR starten</button>
       </div>
       <div id="arStatus" class="debug-status">AR wird geprueft...</div>
-      <div class="toggle-row metric-row mt-6">
-        <label for="metricSelect" class="label-sm">Metrik</label>
-        <select id="metricSelect">
-          <option selected="selected" value="events">Events</option>
-          <option value="fatalities">Fatalities</option>
-        </select>
+      <div class="label-sm mt-6" style="margin-bottom: 4px;">Metrik</div>
+      <div class="toggle-row metric-row">
+        <button id="metricEventsBtn" type="button" class="active">Events</button>
+        <button id="metricFatalitiesBtn" type="button">Fatalities</button>
       </div>
     </div>
   </div>

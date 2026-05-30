@@ -40,7 +40,7 @@ import { clear2DOverlay } from "./rendering/overlayRenderer.js";
 import {
   container, yearSlider, yearLabel, info,
   mode3dBtn, mode2dBtn, playPauseBtn, playStatus,
-  metricSelect, regionSelect, regionToggleRow, regionAvailability,
+  metricEventsBtn, metricFatalitiesBtn, regionSelect, regionToggleRow, regionAvailability,
   dualRangeTrack, dualRangeFill,
   timeRangeStartThumb, timeRangeEndThumb,
   timeRangeStartSlider, timeRangeEndSlider,
@@ -111,7 +111,7 @@ initAppContext({
   state, container,
   yearSlider, yearLabel, info,
   mode3dBtn, mode2dBtn, playPauseBtn, playStatus,
-  metricSelect, regionSelect, regionToggleRow, regionAvailability,
+  metricEventsBtn, metricFatalitiesBtn, regionSelect, regionToggleRow, regionAvailability,
   dualRangeTrack, dualRangeFill,
   timeRangeStartThumb, timeRangeEndThumb,
   timeRangeStartSlider, timeRangeEndSlider,

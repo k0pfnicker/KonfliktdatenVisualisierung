@@ -1,7 +1,7 @@
 import {
   yearSlider, timeRangeStartSlider, timeRangeEndSlider,
   mode3dBtn, mode2dBtn, arBtn,
-  playPauseBtn, metricSelect, regionSelect,
+  playPauseBtn, metricEventsBtn, metricFatalitiesBtn, regionSelect,
   uiToggleBtn, legendToggleBtn, legendPanel
 } from "./uiElements.js";
 import { renderer, raycaster, mouse, reference2DGroup, camera, controls } from "../core/sceneSetup.js";
@@ -124,12 +124,22 @@ export function registerEventHandlers(appState, worldRoot, callbacks) {
   });
 
   // ─── Metric select ────────────────────────────────────────────────────────
-  metricSelect.addEventListener("change", () => {
-    markUserInteraction();
-    setPlayback(false, appState);
-    appState.metric = metricSelect.value;
-    renderCurrentView();
-  });
+  if (metricEventsBtn && metricFatalitiesBtn) {
+    metricEventsBtn.addEventListener("click", () => {
+      markUserInteraction();
+      appState.metric = "events";
+      updateControlsUI(appState);
+      updateGlobeVisibility(appState);
+      renderCurrentView();
+    });
+    metricFatalitiesBtn.addEventListener("click", () => {
+      markUserInteraction();
+      appState.metric = "fatalities";
+      updateControlsUI(appState);
+      updateGlobeVisibility(appState);
+      renderCurrentView();
+    });
+  }
 
   // ─── Region select ────────────────────────────────────────────────────────
   regionSelect.addEventListener("change", () => {

@@ -47,6 +47,10 @@ export function setMode(mode, appState, worldRoot, callbacks) {
     callbacks.clear2DOverlay();
     if (regionToggleRow) regionToggleRow.style.display = "flex";
     if (metricToggleRow) metricToggleRow.style.display = "flex";
+    if (metricEventsBtn && metricFatalitiesBtn) {
+      metricEventsBtn.classList.toggle("active", appState.metric === "events");
+      metricFatalitiesBtn.classList.toggle("active", appState.metric === "fatalities");
+    }
     if (regionSelect) regionSelect.disabled = false;
     if (mode3dBtn)    mode3dBtn.disabled = true;
     if (mode2dBtn)    mode2dBtn.disabled = false;
