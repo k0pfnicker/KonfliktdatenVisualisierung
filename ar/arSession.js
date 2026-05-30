@@ -68,7 +68,7 @@ export async function startArSession(appState, worldRoot) {
 
   try {
     const session = await navigator.xr.requestSession("immersive-ar", {
-      requiredFeatures: ["local"],
+      requiredFeatures: ["local-floor"],
       optionalFeatures: ["dom-overlay"],
       domOverlay: { root: document.body },
     });
@@ -101,7 +101,7 @@ export async function startArSession(appState, worldRoot) {
       renderCurrentView();
     }, { once: true });
 
-    renderer.xr.setReferenceSpaceType("local");
+
     await renderer.xr.setSession(session);
     renderCurrentView();
   } catch (err) {
