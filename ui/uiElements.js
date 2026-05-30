@@ -19,7 +19,6 @@ export const metricSelect         = document.getElementById("metricSelect");
 export const metricToggleRow      = metricSelect?.closest(".toggle-row") ?? null;
 export const regionSelect         = document.getElementById("regionSelect");
 export const regionToggleRow      = regionSelect?.closest(".toggle-row") ?? null;
-export const desktopDebugBtn      = document.getElementById("desktopDebugBtn");
 export const debugStatus          = document.getElementById("debugStatus");
 export const regionAvailability   = document.getElementById("regionAvailability");
 export const dualRangeTrack       = document.getElementById("dualRangeTrack");

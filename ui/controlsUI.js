@@ -1,7 +1,7 @@
 import {
   mode3dBtn, mode2dBtn, regionToggleRow, regionSelect,
   regionAvailability, playPauseBtn, tooltip,
-  desktopDebugBtn, debugStatus, metricToggleRow
+  debugStatus, metricToggleRow
 } from "./uiElements.js";
 import { controls, earthModel, map2D, chartGroup, haloMesh, camera } from "../core/sceneSetup.js";
 import { update3DLabel } from "../rendering/labelRenderer.js";
@@ -31,7 +31,7 @@ export function updateArPresentation(appState, worldRoot) {
  * @param {object} appState
  * @param {THREE.Group} worldRoot
  * @param {object} callbacks  — { markUserInteraction, updateTemporalControlVisibility,
- *                               updateDesktopDebugUI, renderCurrentView, clear2DOverlay }
+ *                               renderCurrentView, clear2DOverlay }
  */
 export function setMode(mode, appState, worldRoot, callbacks) {
   callbacks.markUserInteraction();
@@ -97,7 +97,6 @@ export function setMode(mode, appState, worldRoot, callbacks) {
   }
 
   callbacks.updateTemporalControlVisibility();
-  callbacks.updateDesktopDebugUI();
   if (appState.arSessionActive) appState.mode = "3d";
 
   if (appState.yearKeys.length > 0) {
@@ -105,27 +104,3 @@ export function setMode(mode, appState, worldRoot, callbacks) {
   }
 }
 
-/**
- * Sync desktop-debug button text and apply debug camera settings.
- * @param {object} appState
- */
-export function updateDesktopDebugUI(appState) {
-  if (desktopDebugBtn) {
-    desktopDebugBtn.classList.toggle("active", appState.desktopDebug);
-    desktopDebugBtn.textContent = appState.desktopDebug ? "Desktop Debug: On" : "Desktop Debug: Off";
-  }
-  if (debugStatus) {
-    debugStatus.textContent = appState.desktopDebug
-      ? "Desktop debug mode is on. Idle auto-rotation is disabled, and mouse/keyboard controls stay stable for inspection."
-      : "PC-test mode is off. Use this to keep the scene stable for mouse/keyboard debugging.";
-  }
-  if (appState.desktopDebug) {
-    controls.enableRotate = true;
-    controls.enablePan = true;
-    controls.enableZoom = true;
-    controls.screenSpacePanning = true;
-    camera.position.set(0, 0, 260);
-    controls.target.set(0, 0, 0);
-    controls.update();
-  }
-}

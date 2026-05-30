@@ -31,7 +31,7 @@ import { mountRendererAndLoadGlobe, scene, camera, renderer, controls, ambient, 
 import { markUserInteraction } from "./core/idleRotation.js";
 import { startAnimationLoop } from "./core/animationLoop.js";
 import { updateArSupportState, startArSession } from "./ar/arSession.js";
-import { setMode, updateDesktopDebugUI } from "./ui/controlsUI.js";
+import { setMode } from "./ui/controlsUI.js";
 import { setPlayback, advanceYear } from "./ui/playbackUI.js";
 import { updateTemporalControlVisibility, updateTimeRangeVisuals, attachDualRangeThumbs, updateYearSliderBounds, commitTimeRangeSelection } from "./ui/timeRangeUI.js";
 import { registerEventHandlers } from "./ui/eventHandlers.js";
@@ -296,12 +296,10 @@ async function init() {
 setMode("3d", state, worldRoot, {
   markUserInteraction,
   updateTemporalControlVisibility: () => updateTemporalControlVisibility(state),
-  updateDesktopDebugUI: () => updateDesktopDebugUI(state),
   renderCurrentView,
   clear2DOverlay,
 });
 setPlayback(false, state);
-updateDesktopDebugUI(state);
 updateArSupportState(state);
 attachDualRangeThumbs(state);
 

@@ -1,12 +1,12 @@
 import {
   yearSlider, timeRangeStartSlider, timeRangeEndSlider,
-  mode3dBtn, mode2dBtn, arBtn, desktopDebugBtn,
+  mode3dBtn, mode2dBtn, arBtn,
   playPauseBtn, metricSelect, regionSelect,
   uiToggleBtn, legendToggleBtn, legendPanel
 } from "./uiElements.js";
 import { renderer, raycaster, mouse, reference2DGroup, camera, controls } from "../core/sceneSetup.js";
 import { markUserInteraction } from "../core/idleRotation.js";
-import { setMode, updateDesktopDebugUI } from "./controlsUI.js";
+import { setMode } from "./controlsUI.js";
 import { setPlayback } from "./playbackUI.js";
 import { commitTimeRangeSelection } from "./timeRangeUI.js";
 import { onRegionSelectChange } from "./regionSelectUI.js";
@@ -40,7 +40,6 @@ export function registerEventHandlers(appState, worldRoot, callbacks) {
     setMode(mode, appState, worldRoot, {
       markUserInteraction,
       updateTemporalControlVisibility: () => updateTemporalControlVisibility(appState),
-      updateDesktopDebugUI: () => updateDesktopDebugUI(appState),
       renderCurrentView,
       clear2DOverlay,
     });
@@ -115,15 +114,6 @@ export function registerEventHandlers(appState, worldRoot, callbacks) {
       return;
     }
     startArSession();
-  });
-
-  // ─── Desktop debug ────────────────────────────────────────────────────────
-  desktopDebugBtn.addEventListener("click", () => {
-    markUserInteraction();
-    appState.desktopDebug = !appState.desktopDebug;
-    if (appState.desktopDebug) doSetMode("3d");
-    updateDesktopDebugUI(appState);
-    renderCurrentView();
   });
 
   // ─── Play/pause ───────────────────────────────────────────────────────────

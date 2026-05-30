@@ -2,7 +2,6 @@ import { arBtn, arStatus } from "../ui/uiElements.js";
 import { renderer, controls } from "../core/sceneSetup.js";
 import { updateArPresentation } from "../ui/controlsUI.js";
 import { setPlayback } from "../ui/playbackUI.js";
-import { updateDesktopDebugUI } from "../ui/controlsUI.js";
 import { renderCurrentView } from "../rendering/viewController.js";
 
 // ─── AR support detection ─────────────────────────────────────────────────────
@@ -77,7 +76,7 @@ export async function startArSession(appState, worldRoot) {
     appState.mode            = "3d";
     updateArPresentation(appState, worldRoot);
     setPlayback(false, appState);
-    updateDesktopDebugUI(appState);
+
     updateArSupportState(appState);
 
     // Lock mode buttons during AR
@@ -93,7 +92,7 @@ export async function startArSession(appState, worldRoot) {
       if (mode2d) mode2d.disabled = false;
       if (mode3d) mode3d.disabled = false;
       controls.enabled = true;
-      updateDesktopDebugUI(appState);
+
       updateArSupportState(appState);
       renderCurrentView();
     }, { once: true });

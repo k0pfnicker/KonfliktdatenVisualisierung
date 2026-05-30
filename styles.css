@@ -9,13 +9,12 @@ body {
 #container {
   width: 100vw;
   height: 100vh;
+  height: 100dvh;
   overflow: hidden;
 }
 #ui {
-  position: absolute;
-  top: 130px;
-  left: 15px;
-  z-index: 10;
+  pointer-events: auto;
+  margin-top: 8px;
   color: #f8fafc;
   background: rgba(15, 23, 42, 0.65);
   backdrop-filter: blur(12px);
