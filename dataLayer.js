@@ -40,7 +40,8 @@ export function getSelectedYearFromSlider() {
   }
 
   const idx = Number.parseInt(yearSlider.value, 10) || 0;
-  return globalThis.__webxrState?.yearKeys?.[idx] ?? null;
+  const years = getSelectableYears();
+  return years[idx] ?? null;
 }
 
 export function getSelectedRangeYears() {

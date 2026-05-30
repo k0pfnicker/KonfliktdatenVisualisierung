@@ -51,13 +51,10 @@ export function registerEventHandlers(appState, worldRoot, callbacks) {
     markUserInteraction();
     setPlayback(false, appState);
     appState.autoFollowLatest = false;
-    if (!appState.selectedRegion) {
-      const yearIndex = Number.parseInt(yearSlider.value, 10) || 0;
-      const year = appState.yearKeys[yearIndex] ?? null;
-      if (year !== null) {
-        renderForYear(year);
-        syncYearSliderValueLabel();
-      }
+    const year = getSelectedYearFromSlider();
+    if (year !== null) {
+      renderForYear(year);
+      syncYearSliderValueLabel();
     }
   });
 
