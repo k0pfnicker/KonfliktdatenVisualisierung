@@ -3,7 +3,7 @@ import {
   mode3dBtn, mode2dBtn, arBtn,
   playPauseBtn, metricEventsBtn, metricFatalitiesBtn, regionSelect,
   uiToggleBtn, legendToggleBtn, legendPanel,
-  arWarningBtn, arWarningPopup
+  arWarningBtn, arWarningPopup, arResetBtn
 } from "./uiElements.js";
 import { renderer, raycaster, mouse, reference2DGroup, camera, controls } from "../core/sceneSetup.js";
 import { markUserInteraction } from "../core/idleRotation.js";
@@ -116,6 +116,21 @@ export function registerEventHandlers(appState, worldRoot, callbacks) {
     }
     callbacks.startArSession();
   });
+
+  if (arResetBtn) {
+    arResetBtn.addEventListener("click", () => {
+      markUserInteraction();
+      if (!appState.arSessionActive || !worldRoot) return;
+
+      // Snap worldRoot to be 2.5 meters strictly in front of the current camera position
+      const distance = 2.5;
+      const direction = new THREE.Vector3(0, 0, -1);
+      direction.applyQuaternion(camera.quaternion);
+
+      worldRoot.position.copy(camera.position).add(direction.multiplyScalar(distance));
+      worldRoot.position.y -= 0.2; // Keep it slightly lowered for comfortable viewing
+    });
+  }
 
   // ─── AR Warning Popup ───────────────────────────────────────────────────────
   if (arWarningBtn && arWarningPopup) {

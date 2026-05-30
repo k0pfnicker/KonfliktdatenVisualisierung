@@ -49,7 +49,9 @@ function getCountryPosition(country, mode) {
   let lat, lon;
   if (Array.isArray(coords)) { [lat, lon] = coords; } else { lat = coords.lat; lon = coords.lon; }
   if (mode === "3d") {
-    return { pos: latLonToCartesian(lat, lon, globeRadius), lookAt: new THREE.Vector3(0, 0, 0) };
+    const target = new THREE.Vector3();
+    chartGroup.getWorldPosition(target);
+    return { pos: latLonToCartesian(lat, lon, globeRadius), lookAt: target };
   }
   const pos = latLonTo2D(lat, lon, globeRadius);
   return { pos, lookAt: new THREE.Vector3(pos.x, pos.y, -1) };

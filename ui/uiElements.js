@@ -13,6 +13,7 @@ export const mode3dBtn            = document.getElementById("mode3dBtn");
 export const mode2dBtn            = document.getElementById("mode2dBtn");
 export const playPauseBtn         = document.getElementById("playPauseBtn");
 export const arBtn                = document.getElementById("arBtn");
+export const arResetBtn           = document.getElementById("arResetBtn");
 export const arWarningContainer   = document.getElementById("arWarningContainer");
 export const arWarningBtn         = document.getElementById("arWarningBtn");
 export const arWarningPopup       = document.getElementById("arWarningPopup");
