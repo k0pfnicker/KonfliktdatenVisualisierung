@@ -1,4 +1,4 @@
-import { arBtn, arStatus } from "../ui/uiElements.js";
+import { arBtn, arWarningContainer, arWarningPopup } from "../ui/uiElements.js";
 import { renderer, controls } from "../core/sceneSetup.js";
 import { updateArPresentation } from "../ui/controlsUI.js";
 import { setPlayback } from "../ui/playbackUI.js";
@@ -16,8 +16,11 @@ export async function updateArSupportState(appState) {
     if (arBtn) {
       arBtn.disabled = true;
       arBtn.textContent = "AR nicht verfuegbar";
+      const arRow = arBtn.closest(".ar-row");
+      if (arRow) arRow.style.display = "none";
     }
-    if (arStatus) arStatus.style.display = "none";
+    if (arWarningContainer) arWarningContainer.style.display = "block";
+    if (arWarningPopup) arWarningPopup.textContent = "AR wird von diesem Browser oder Gerät nicht unterstützt.";
     return;
   }
 
@@ -25,10 +28,10 @@ export async function updateArSupportState(appState) {
     appState.arSupported = false;
     arBtn.disabled = true;
     arBtn.textContent = "AR nicht verfuegbar";
-    if (arStatus) {
-      arStatus.style.display = "block";
-      arStatus.textContent = "AR braucht HTTPS oder localhost. Ein LAN-HTTP-Server reicht fuer immersive-ar meist nicht aus.";
-    }
+    const arRow = arBtn.closest(".ar-row");
+    if (arRow) arRow.style.display = "none";
+    if (arWarningContainer) arWarningContainer.style.display = "block";
+    if (arWarningPopup) arWarningPopup.textContent = "AR braucht HTTPS oder localhost. Ein LAN-HTTP-Server reicht für immersive-ar meist nicht aus.";
     return;
   }
 
@@ -43,14 +46,17 @@ export async function updateArSupportState(appState) {
     arBtn.textContent = appState.arSessionActive
       ? "AR beenden"
       : appState.arSupported ? "AR starten" : "AR nicht verfuegbar";
+      
+    const arRow = arBtn.closest(".ar-row");
+    if (arRow) {
+      arRow.style.display = appState.arSupported || appState.arSessionActive ? "flex" : "none";
+    }
   }
-  if (arStatus) {
-    arStatus.style.display = appState.arSupported || appState.arSessionActive ? "block" : "none";
-    arStatus.textContent = appState.arSessionActive
-      ? "AR-Session laeuft. Desktop debug und 2D sind jetzt gesperrt."
-      : appState.arSupported
-        ? "AR ist verfuegbar. Auf einem kompatiblen Gerät kannst du eine immersive AR-Session starten."
-        : "AR wird von diesem Browser oder Gerät nicht unterstützt.";
+  if (arWarningContainer) {
+    arWarningContainer.style.display = appState.arSupported || appState.arSessionActive ? "none" : "block";
+    if (arWarningPopup && !appState.arSupported) {
+      arWarningPopup.textContent = "AR wird von diesem Browser oder Gerät nicht unterstützt.";
+    }
   }
 }
 

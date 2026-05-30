@@ -48,8 +48,8 @@ export function setMode(mode, appState, worldRoot, callbacks) {
     if (regionToggleRow) regionToggleRow.style.display = "flex";
     if (metricToggleRow) metricToggleRow.style.display = "flex";
     if (metricEventsBtn && metricFatalitiesBtn) {
-      metricEventsBtn.classList.toggle("active", appState.metric === "events");
-      metricFatalitiesBtn.classList.toggle("active", appState.metric === "fatalities");
+      metricEventsBtn.disabled = appState.metric === "events";
+      metricFatalitiesBtn.disabled = appState.metric === "fatalities";
     }
     if (regionSelect) regionSelect.disabled = false;
     if (mode3dBtn)    mode3dBtn.disabled = true;
@@ -105,6 +105,17 @@ export function setMode(mode, appState, worldRoot, callbacks) {
 
   if (appState.yearKeys.length > 0) {
     callbacks.renderCurrentView();
+  }
+}
+
+/**
+ * Update the visual state of the UI controls based on the current app state.
+ * @param {object} appState
+ */
+export function updateControlsUI(appState) {
+  if (metricEventsBtn && metricFatalitiesBtn) {
+    metricEventsBtn.disabled = appState.metric === "events";
+    metricFatalitiesBtn.disabled = appState.metric === "fatalities";
   }
 }
 

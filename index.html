@@ -10,6 +10,17 @@
 
 <body>
   <div id="container"></div>
+  <div id="arWarningContainer" style="position: fixed; top: 12px; right: 12px; z-index: 1000; display: none;">
+    <button id="arWarningBtn" type="button"
+      style="background: rgba(239, 68, 68, 0.8); border: 1px solid rgba(255,255,255,0.2); border-radius: 50%; width: 36px; height: 36px; color: white; cursor: pointer; display: flex; align-items: center; justify-content: center; font-weight: bold; box-shadow: 0 4px 12px rgba(0,0,0,0.5);"
+      title="AR Info">
+      !
+    </button>
+    <div id="arWarningPopup"
+      style="display: none; position: absolute; top: 44px; right: 0; background: rgba(15, 23, 42, 0.9); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; padding: 12px; width: 220px; color: white; font-size: 13px; box-shadow: 0 4px 12px rgba(0,0,0,0.5); backdrop-filter: blur(12px);">
+      AR nicht verfügbar (WebXR fehlt oder HTTPS erforderlich).
+    </div>
+  </div>
   <div id="topControls" class="screen-strip screen-strip-top">
     <div class="region-group">
       <div class="toggle-row region-row top-region-row">
@@ -26,18 +37,22 @@
     <div id="ui">
       <div><strong>Conflict Prototype</strong></div>
       <div class="subheading">Globale Visualisierung nach Events und Fatalities.</div>
-      <div class="toggle-row mode-row">
+      <div class="toggle-row mode-row" style="align-items: center;">
+        <label class="label-sm" style="margin-right: 8px;">Modus:</label>
         <button id="mode3dBtn" type="button">3D</button>
         <button id="mode2dBtn" type="button">2D</button>
+      </div>
+      <div class="toggle-row animation-row mt-6" style="align-items: center;">
+        <label class="label-sm" style="margin-right: 8px;">Animation:</label>
         <button id="playPauseBtn" type="button">Start/Stop</button>
       </div>
       <div class="toggle-row ar-row mt-6">
         <button id="arBtn" type="button">AR starten</button>
       </div>
-      <div id="arStatus" class="debug-status">AR wird geprueft...</div>
-      <div class="label-sm mt-6" style="margin-bottom: 4px;">Metrik</div>
-      <div class="toggle-row metric-row">
-        <button id="metricEventsBtn" type="button" class="active">Events</button>
+
+      <div class="toggle-row metric-row mt-6" style="align-items: center;">
+        <label class="label-sm" style="margin-right: 8px;">Metrik</label>
+        <button id="metricEventsBtn" type="button" disabled>Events</button>
         <button id="metricFatalitiesBtn" type="button">Fatalities</button>
       </div>
     </div>
@@ -45,13 +60,13 @@
   <div id="bottomControls" class="screen-strip screen-strip-bottom">
     <button id="legendToggleBtn" type="button" class="ui-toggle-inline" style="margin-bottom: 4px;">Legende</button>
     <div id="legendPanel" class="year-control" style="display: none; margin-bottom: 8px;">
-       <div id="legendTitle" class="section-title" style="font-weight: bold; color: #fff;">Legende</div>
-       <div id="legendScale"></div>
-       <div id="legendRange" style="margin-top: 6px; font-variant-numeric: tabular-nums; font-size: 13px;">-</div>
-       <div id="legend2DInfo" style="display: none; margin-top: 8px; font-size: 12px; color: #cbd5e1;">
-         <strong>2D-Ansicht:</strong> Partikelfarbe basiert auf der Anzahl der Todesopfer (Fatalities).<br>
-         <span style="color:#fcd34d;">Gelb</span> = 0 Opfer | <span style="color:#ef4444;">Rot</span> = 30+ Opfer
-       </div>
+      <div id="legendTitle" class="section-title" style="font-weight: bold; color: #fff;">Legende</div>
+      <div id="legendScale"></div>
+      <div id="legendRange" style="margin-top: 6px; font-variant-numeric: tabular-nums; font-size: 13px;">-</div>
+      <div id="legend2DInfo" style="display: none; margin-top: 8px; font-size: 12px; color: #cbd5e1;">
+        <strong>2D-Ansicht:</strong> Partikelfarbe basiert auf der Anzahl der Todesopfer (Fatalities).<br>
+        <span style="color:#fcd34d;">Gelb</span> = 0 Opfer | <span style="color:#ef4444;">Rot</span> = 30+ Opfer
+      </div>
     </div>
     <div class="year-control" id="yearControl">
       <div class="screen-strip-label">Jahr</div>
@@ -77,7 +92,7 @@
   </div>
   <div id="controlToast" class="control-toast" aria-live="polite"></div>
   <div id="acledAttribution"
-    style="position: fixed; bottom: 0px; right: 4px; margin: 0; padding: 2px; color: rgba(255,255,255,0.4); font-size: 10px; font-family: sans-serif; pointer-events: none; z-index: 1000;">
+    style="position: fixed; bottom: 0px; right: 0px; margin: 0; padding: 0; color: rgba(255,255,255,0.4); font-size: 10px; line-height: 1; font-family: sans-serif; pointer-events: none; z-index: 1000;">
     Data: Armed Conflict Location &amp; Event Data Project (ACLED); acleddata.com
   </div>
 

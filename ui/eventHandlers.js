@@ -2,11 +2,12 @@ import {
   yearSlider, timeRangeStartSlider, timeRangeEndSlider,
   mode3dBtn, mode2dBtn, arBtn,
   playPauseBtn, metricEventsBtn, metricFatalitiesBtn, regionSelect,
-  uiToggleBtn, legendToggleBtn, legendPanel
+  uiToggleBtn, legendToggleBtn, legendPanel,
+  arWarningBtn, arWarningPopup
 } from "./uiElements.js";
 import { renderer, raycaster, mouse, reference2DGroup, camera, controls } from "../core/sceneSetup.js";
 import { markUserInteraction } from "../core/idleRotation.js";
-import { setMode } from "./controlsUI.js";
+import { setMode, updateControlsUI } from "./controlsUI.js";
 import { setPlayback } from "./playbackUI.js";
 import { commitTimeRangeSelection } from "./timeRangeUI.js";
 import { onRegionSelectChange } from "./regionSelectUI.js";
@@ -116,6 +117,15 @@ export function registerEventHandlers(appState, worldRoot, callbacks) {
     startArSession();
   });
 
+  // ─── AR Warning Popup ───────────────────────────────────────────────────────
+  if (arWarningBtn && arWarningPopup) {
+    arWarningBtn.addEventListener("click", () => {
+      markUserInteraction();
+      const isVisible = arWarningPopup.style.display === "block";
+      arWarningPopup.style.display = isVisible ? "none" : "block";
+    });
+  }
+
   // ─── Play/pause ───────────────────────────────────────────────────────────
   playPauseBtn.addEventListener("click", () => {
     markUserInteraction();
@@ -127,16 +137,16 @@ export function registerEventHandlers(appState, worldRoot, callbacks) {
   if (metricEventsBtn && metricFatalitiesBtn) {
     metricEventsBtn.addEventListener("click", () => {
       markUserInteraction();
+      setPlayback(false, appState);
       appState.metric = "events";
       updateControlsUI(appState);
-      updateGlobeVisibility(appState);
       renderCurrentView();
     });
     metricFatalitiesBtn.addEventListener("click", () => {
       markUserInteraction();
+      setPlayback(false, appState);
       appState.metric = "fatalities";
       updateControlsUI(appState);
-      updateGlobeVisibility(appState);
       renderCurrentView();
     });
   }

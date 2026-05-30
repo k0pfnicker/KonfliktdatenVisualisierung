@@ -469,7 +469,8 @@ select option {
   }
 
   .mode-row,
-  .metric-row {
+  .metric-row,
+  .animation-row {
     display: flex;
     flex-wrap: wrap;
   }
