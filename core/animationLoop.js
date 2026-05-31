@@ -181,6 +181,7 @@ export function startAnimationLoop(appState, controls, loopCallbacks) {
 
       worldRoot.position.copy(xrCamera.position).add(direction.multiplyScalar(distance));
       worldRoot.position.y -= 0.2; // Keep it slightly lowered for comfortable viewing
+      worldRoot.scale.setScalar(0.008); // Reset to default AR scale
     }
 
     // Detect when user interacts after idle started → trigger one restore animation
