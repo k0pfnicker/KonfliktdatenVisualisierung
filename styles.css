@@ -30,7 +30,8 @@ body.controls-collapsed #ui {
 }
 
 #uiToggleBtn,
-#legendToggleBtn {
+#legendToggleBtn,
+.ar-btn {
   display: block;
   position: static;
   align-self: flex-start;
