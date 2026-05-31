@@ -1,5 +1,5 @@
 import * as THREE from "three";
-import { scene, camera, renderer, chartGroup, worldRoot } from "./sceneSetup.js";
+import { scene, camera, renderer, chartGroup, worldRoot, camLight } from "./sceneSetup.js";
 import {
   applyIdleEarthRotation,
   isIdleActive,
@@ -162,6 +162,14 @@ export function startAnimationLoop(appState, controls, loopCallbacks) {
 
     controls.update();
     applyIdleEarthRotation(dt, appState);
+
+    // Sync lighting with active camera
+    const activeCamera = appState.arSessionActive ? renderer.xr.getCamera(camera) : camera;
+    camLight.position.copy(activeCamera.position);
+    camLight.target.position.copy(activeCamera.position).add(
+      new THREE.Vector3(0, 0, -1).applyQuaternion(activeCamera.quaternion)
+    );
+    camLight.target.updateMatrixWorld();
 
     // Process AR Reset request (Zentrieren)
     if (appState.triggerArReset && appState.arSessionActive && worldRoot) {

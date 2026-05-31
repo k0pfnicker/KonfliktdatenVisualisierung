@@ -34,7 +34,8 @@ scene.add(ambient);
 
 export const camLight = new THREE.DirectionalLight(0xffffff, 1.5);
 camLight.position.set(0, 0, 1);
-camera.add(camLight);
+scene.add(camLight);
+scene.add(camLight.target);
 scene.add(camera);
 
 // ─── World root & groups ──────────────────────────────────────────────────────

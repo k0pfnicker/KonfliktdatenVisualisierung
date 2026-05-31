@@ -192,7 +192,8 @@ export function registerEventHandlers(appState, worldRoot, callbacks) {
     mouse.x = ((e.clientX - rect.left) / rect.width) * 2 - 1;
     mouse.y = -((e.clientY - rect.top) / rect.height) * 2 + 1;
 
-    raycaster.setFromCamera(mouse, camera);
+    const activeCamera = appState.arSessionActive ? renderer.xr.getCamera(camera) : camera;
+    raycaster.setFromCamera(mouse, activeCamera);
     const hitTargets = appState.mode === "2d"
       ? reference2DGroup.children
       : appState.barMeshes.flatMap((mesh) => (mesh.userData?.hitProxy ? [mesh, mesh.userData.hitProxy] : [mesh]));
@@ -246,13 +247,13 @@ export function registerEventHandlers(appState, worldRoot, callbacks) {
   let previousMousePosition = { x: 0, y: 0 };
 
   renderer.domElement.addEventListener('pointerdown', (e) => {
-    if (!appState.arSessionActive) return;
+    if (!appState.arSessionActive || !e.isPrimary) return;
     isDraggingAR = true;
     previousMousePosition = { x: e.clientX, y: e.clientY };
   });
 
   renderer.domElement.addEventListener('pointermove', (e) => {
-    if (!appState.arSessionActive || !isDraggingAR) return;
+    if (!appState.arSessionActive || !isDraggingAR || !e.isPrimary) return;
     
     const deltaMove = {
       x: e.clientX - previousMousePosition.x,
@@ -271,5 +272,39 @@ export function registerEventHandlers(appState, worldRoot, callbacks) {
   });
   renderer.domElement.addEventListener('pointerout', () => {
     isDraggingAR = false;
+  });
+
+  // ─── AR Pinch to Zoom ─────────────────────────────────────────────────────
+  let initialPinchDistance = null;
+  let initialWorldScale = 1;
+
+  renderer.domElement.addEventListener('touchstart', (e) => {
+    if (!appState.arSessionActive) return;
+    if (e.touches.length === 2) {
+      const dx = e.touches[0].clientX - e.touches[1].clientX;
+      const dy = e.touches[0].clientY - e.touches[1].clientY;
+      initialPinchDistance = Math.sqrt(dx * dx + dy * dy);
+      initialWorldScale = worldRoot.scale.x;
+    }
+  }, { passive: true });
+
+  renderer.domElement.addEventListener('touchmove', (e) => {
+    if (!appState.arSessionActive) return;
+    if (e.touches.length === 2 && initialPinchDistance) {
+      const dx = e.touches[0].clientX - e.touches[1].clientX;
+      const dy = e.touches[0].clientY - e.touches[1].clientY;
+      const distance = Math.sqrt(dx * dx + dy * dy);
+      
+      const scaleFactor = distance / initialPinchDistance;
+      const newScale = Math.max(0.1, Math.min(5.0, initialWorldScale * scaleFactor));
+      
+      worldRoot.scale.set(newScale, newScale, newScale);
+    }
+  }, { passive: true });
+
+  renderer.domElement.addEventListener('touchend', (e) => {
+    if (e.touches.length < 2) {
+      initialPinchDistance = null;
+    }
   });
 }
