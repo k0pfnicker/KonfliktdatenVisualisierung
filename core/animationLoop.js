@@ -87,7 +87,7 @@ function spawnNumberPopup(appState, pos, text, colorHex) {
   });
 }
 
-function updateNumberPopups(appState, dt) {
+function updateNumberPopups(appState, dt, activeCamera) {
   for (let i = appState.numberPopups.length - 1; i >= 0; i--) {
     const p = appState.numberPopups[i];
     p.age += dt;
@@ -100,7 +100,7 @@ function updateNumberPopups(appState, dt) {
       const progress = p.age / p.maxAge;
       p.sprite.position.addScaledVector(p.velocity, dt);
       p.sprite.material.opacity = 1.0 - progress;
-      p.sprite.lookAt(camera.position);
+      p.sprite.lookAt(activeCamera.position);
     }
   }
 }
@@ -214,7 +214,11 @@ export function startAnimationLoop(appState, controls, loopCallbacks) {
     }
 
     updateRipples(dt);
-    updateNumberPopups(appState, dt);
+    if (appState.focusPod && appState.focusPod.sprite) {
+      appState.focusPod.sprite.lookAt(activeCamera.position);
+    }
+
+    updateNumberPopups(appState, dt, activeCamera);
 
     renderer.render(scene, camera);
   }
