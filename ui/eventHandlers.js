@@ -296,7 +296,9 @@ export function registerEventHandlers(appState, worldRoot, callbacks) {
       const distance = Math.sqrt(dx * dx + dy * dy);
       
       const scaleFactor = distance / initialPinchDistance;
-      const newScale = Math.max(0.1, Math.min(5.0, initialWorldScale * scaleFactor));
+      // In AR, the base scale is 0.008. We clamp between 0.1x and 5.0x of the base scale.
+      const arBaseScale = 0.008;
+      const newScale = Math.max(arBaseScale * 0.1, Math.min(arBaseScale * 5.0, initialWorldScale * scaleFactor));
       
       worldRoot.scale.set(newScale, newScale, newScale);
     }
