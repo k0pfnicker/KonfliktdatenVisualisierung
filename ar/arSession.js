@@ -1,4 +1,4 @@
-import { arBtn, arResetBtn, arWarningContainer, arWarningPopup } from "../ui/uiElements.js";
+import { arBtn, arResetBtn, arResetContainer, arWarningContainer, arWarningPopup } from "../ui/uiElements.js";
 import { renderer, controls, scene } from "../core/sceneSetup.js";
 import * as THREE from "three";
 import { updateArPresentation } from "../ui/controlsUI.js";
@@ -48,8 +48,8 @@ export async function updateArSupportState(appState) {
       
     arBtn.style.display = appState.arSupported || appState.arSessionActive ? "block" : "none";
   }
-  if (arResetBtn) {
-    arResetBtn.style.display = appState.arSessionActive ? "block" : "none";
+  if (arResetContainer) {
+    arResetContainer.style.display = appState.arSessionActive ? "flex" : "none";
   }
   if (arWarningContainer) {
     arWarningContainer.style.display = appState.arSupported || appState.arSessionActive ? "none" : "block";

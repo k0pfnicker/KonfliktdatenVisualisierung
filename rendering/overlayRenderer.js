@@ -1,6 +1,7 @@
 import * as THREE from "three";
 import { COUNTRY_COORDS } from "../country_coords.js";
 import { reference2DGroup, map2D, globeRadius } from "../core/sceneSetup.js";
+import { legend2DMin, legend2DMax } from "../ui/uiElements.js";
 import { state } from "../appContext.js";
 import { getMetricValue, softCapRatio, getEventTypeColor } from "../appUtils.js";
 import { getSelectableYearLabel, getEventTypesForYears, getParticlesForYears } from "../dataLayer.js";
@@ -107,14 +108,23 @@ export function build2DMapOverlay(years) {
     const positions = new Float32Array(particles.length * 3);
     const intensities = new Float32Array(particles.length);
 
-    // First pass: calculate intensities and find max intensity
+    // First pass: calculate intensities and find max/min intensity
     let maxIntensity = 1;
+    let minIntensity = Infinity;
     for (let i = 0; i < particles.length; i++) {
       const p = particles[i];
       // Base intensity heavily on fatalities for maximum impact
       const intensity = p.fatalitiesTotal > 0 ? p.fatalitiesTotal : (p.eventsTotal * 0.5);
       intensities[i] = intensity;
       if (intensity > maxIntensity) maxIntensity = intensity;
+      if (intensity > 0 && intensity < minIntensity) minIntensity = intensity;
+    }
+    
+    if (legend2DMin) {
+      legend2DMin.textContent = minIntensity === Infinity ? "0" : Math.round(minIntensity).toLocaleString();
+    }
+    if (legend2DMax) {
+      legend2DMax.textContent = Math.round(maxIntensity).toLocaleString() + "+";
     }
 
     // Second pass: set positions with Z-elevation based on intensity

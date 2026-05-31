@@ -1,5 +1,5 @@
 import {
-  yearControl, yearSlider, playPauseBtn,
+  yearControl, yearSlider, playPauseBtn, animationRow,
   timeRangeBlock, timeRangeStartSlider, timeRangeEndSlider,
   timeRangeStartThumb, timeRangeEndThumb, dualRangeFill,
   dualRangeTrack,
@@ -71,7 +71,7 @@ export function updateTemporalControlVisibility(appState) {
 
   if (yearControl)  yearControl.style.display  = showRangeControl ? "none"  : "block";
   if (timeRangeBlock) timeRangeBlock.style.display = showRangeControl ? "block" : "none";
-  if (playPauseBtn) playPauseBtn.style.display = appState.mode === "2d" ? "none" : "";
+  if (animationRow) animationRow.style.display = appState.mode === "2d" ? "none" : "flex";
 
   if (!showRangeControl) {
     if (timeRangeStartSlider) timeRangeStartSlider.disabled = true;

@@ -361,7 +361,8 @@ export function syncSelectionControls() {
   const hasRangeSpace = selectableYears.length > 1;
 
   if (yearSlider) {
-    yearSlider.disabled = hasRegion || selectableYears.length === 0;
+    const is2D = appState?.mode === "2d";
+    yearSlider.disabled = (!is2D && hasRegion) || selectableYears.length === 0;
   }
   if (timeRangeStartSlider) {
     timeRangeStartSlider.disabled = !hasRegion || !hasRangeSpace;
@@ -457,11 +458,6 @@ export function getYearsForCurrentView() {
   const appState = globalThis.__webxrState;
 
   if (appState?.mode === "2d") {
-    if (appState.selectedTimeRange && appState.selectedTimeRange.endIndex > appState.selectedTimeRange.startIndex) {
-      const years = appState.yearKeys.slice(appState.selectedTimeRange.startIndex, appState.selectedTimeRange.endIndex + 1);
-      return years.length ? years : appState.yearKeys;
-    }
-
     const year = getSelectedYearFromSlider();
     return year ? [year] : appState?.yearKeys ?? [];
   }

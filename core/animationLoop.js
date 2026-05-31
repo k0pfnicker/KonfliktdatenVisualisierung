@@ -1,5 +1,5 @@
 import * as THREE from "three";
-import { scene, camera, renderer, chartGroup } from "./sceneSetup.js";
+import { scene, camera, renderer, chartGroup, worldRoot } from "./sceneSetup.js";
 import {
   applyIdleEarthRotation,
   isIdleActive,
@@ -162,6 +162,18 @@ export function startAnimationLoop(appState, controls, loopCallbacks) {
 
     controls.update();
     applyIdleEarthRotation(dt, appState);
+
+    // Process AR Reset request (Zentrieren)
+    if (appState.triggerArReset && appState.arSessionActive && worldRoot) {
+      appState.triggerArReset = false;
+      const xrCamera = renderer.xr.getCamera(camera);
+      const distance = 2.5;
+      const direction = new THREE.Vector3(0, 0, -1);
+      direction.applyQuaternion(xrCamera.quaternion);
+
+      worldRoot.position.copy(xrCamera.position).add(direction.multiplyScalar(distance));
+      worldRoot.position.y -= 0.2; // Keep it slightly lowered for comfortable viewing
+    }
 
     // Detect when user interacts after idle started → trigger one restore animation
     if (isIdleActive() && !isRestoring() && getLastUserInteractionAtMs() > idleStartedAtMs) {

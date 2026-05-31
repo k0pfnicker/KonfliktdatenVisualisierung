@@ -34,9 +34,8 @@
       </div>
     </div>
     <div style="display: flex; gap: 8px; pointer-events: auto;">
-      <button id="arResetBtn" type="button" class="ui-toggle-inline ar-btn" style="display: none;">Zentrieren</button>
-      <button id="arBtn" type="button" class="ui-toggle-inline ar-btn" style="display: none;">AR starten</button>
       <button id="uiToggleBtn" type="button" class="ui-toggle-inline">Controls</button>
+      <button id="arBtn" type="button" class="ui-toggle-inline ar-btn" style="display: none;">AR starten</button>
     </div>
     <div id="ui">
       <div><strong>Conflict Prototype</strong></div>
@@ -46,7 +45,7 @@
         <button id="mode3dBtn" type="button">3D</button>
         <button id="mode2dBtn" type="button">2D</button>
       </div>
-      <div class="toggle-row animation-row mt-6" style="align-items: center;">
+      <div id="animationRow" class="toggle-row animation-row mt-6" style="align-items: center;">
         <label class="label-sm" style="margin-right: 8px;">Animation:</label>
         <button id="playPauseBtn" type="button">Start/Stop</button>
       </div>
@@ -56,6 +55,10 @@
         <label class="label-sm" style="margin-right: 8px;">Metrik</label>
         <button id="metricEventsBtn" type="button" disabled>Events</button>
         <button id="metricFatalitiesBtn" type="button">Fatalities</button>
+      </div>
+      
+      <div id="arResetContainer" class="toggle-row mt-6" style="display: none; justify-content: center;">
+        <button id="arResetBtn" type="button" class="ar-btn" style="width: 100%;">AR-Ansicht zentrieren</button>
       </div>
     </div>
   </div>
@@ -67,7 +70,7 @@
       <div id="legendRange" style="margin-top: 6px; font-variant-numeric: tabular-nums; font-size: 13px;">-</div>
       <div id="legend2DInfo" style="display: none; margin-top: 8px; font-size: 12px; color: #cbd5e1;">
         <strong>2D-Ansicht:</strong> Partikelfarbe basiert auf der Anzahl der Todesopfer (Fatalities).<br>
-        <span style="color:#fcd34d;">Gelb</span> = 0 Opfer | <span style="color:#ef4444;">Rot</span> = 30+ Opfer
+        <span style="color:#fcd34d;">Gelb</span> = <span id="legend2DMin">0</span> Opfer | <span style="color:#ef4444;">Rot</span> = <span id="legend2DMax">30+</span> Opfer
       </div>
     </div>
     <div class="year-control" id="yearControl">
