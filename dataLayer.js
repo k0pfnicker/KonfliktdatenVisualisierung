@@ -218,8 +218,10 @@ export function addRowToYearlyAggregation(row) {
 
   if (!dataState.allCountriesInDataset) {
     dataState.allCountriesInDataset = new Set();
+    dataState.countryToRegion = new Map();
   }
   dataState.allCountriesInDataset.add(row.country);
+  dataState.countryToRegion.set(row.country, row.region);
 
   if (!dataState.yearlyByYear.has(year)) {
     dataState.yearlyByYear.set(year, new Map());

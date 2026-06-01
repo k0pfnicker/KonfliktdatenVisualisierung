@@ -67,6 +67,7 @@ const state = {
   totalsByYear: new Map(),
   barMeshes: [],
   allCountriesInDataset: new Set(),
+  countryToRegion: new Map(),
   totalRows: 0,
   autoFollowLatest: true,
   mode: "3d",

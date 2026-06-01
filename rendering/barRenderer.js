@@ -3,7 +3,7 @@ import { COUNTRY_COORDS } from "../country_coords.js";
 import { scene, camera, chartGroup, globeRadius } from "../core/sceneSetup.js";
 import { state } from "../appContext.js";
 import { formatNumber, getMetricLabel, getMetricValue, softCapRatio } from "../appUtils.js";
-import { getTopRowsForYears } from "../dataLayer.js";
+import { getTopRowsForYears, getYearsForCurrentView } from "../dataLayer.js";
 import { legendTitle, legendRange, yearLabel } from "../ui/uiElements.js";
 
 // ─── Object Pools & Geometries ────────────────────────────────────────────────
@@ -190,8 +190,22 @@ export function buildBarsFromRows(selectionLabel, rows, periodType) {
   // No-data markers for countries present in the dataset but absent from current selection
   if (!state.selectedRegion && state.allCountriesInDataset) {
     const activeCountries = new Set(rows.map((row) => row.country));
+    const currentYears = getYearsForCurrentView();
+
     for (const country of state.allCountriesInDataset) {
       if (activeCountries.has(country)) continue;
+
+      const region = state.countryToRegion?.get(country);
+      const regionData = region ? state.regionMinMaxYears?.get(region) : null;
+      let hasCoverage = true;
+
+      if (regionData && currentYears.length > 0) {
+        hasCoverage = currentYears.some(y => y >= regionData.min && y <= regionData.max);
+      }
+
+      const markerColor = hasCoverage ? 0xcbd5e1 : 0xef4444;
+      const markerOpacity = hasCoverage ? 0.65 : 0.85;
+
       const result = getCountryPosition(country, state.mode);
       if (!result) continue;
       const { pos, lookAt } = result;
@@ -200,9 +214,11 @@ export function buildBarsFromRows(selectionLabel, rows, periodType) {
       if (markerPool.has(country)) {
         markerMesh = markerPool.get(country);
         markerMesh.visible = true;
+        markerMesh.material.color.setHex(markerColor);
+        markerMesh.material.opacity = markerOpacity;
       } else {
         const material = new THREE.MeshBasicMaterial({
-          color: 0xcbd5e1, transparent: true, opacity: 0.65,
+          color: markerColor, transparent: true, opacity: markerOpacity,
           depthWrite: false, side: THREE.DoubleSide,
         });
         markerMesh = new THREE.Mesh(genericMarkerGeo, material);
