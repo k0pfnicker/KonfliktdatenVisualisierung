@@ -58,7 +58,7 @@ export function setMode(mode, appState, worldRoot, callbacks) {
     haloMesh.visible = true;
     
     const subheading = document.querySelector(".subheading");
-    if (subheading) subheading.textContent = "Globale Visualisierung nach Events und Fatalities.";
+    if (subheading) subheading.textContent = "Globale Visualisierung nach Ereignissen und Opferzahlen.";
     const legendTitle = document.getElementById("legendTitle");
     const legendScale = document.getElementById("legendScale");
     const legendRange = document.getElementById("legendRange");

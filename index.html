@@ -39,7 +39,7 @@
     </div>
     <div id="ui">
       <div><strong>Conflict Prototype</strong></div>
-      <div class="subheading">Globale Visualisierung nach Events und Fatalities.</div>
+      <div class="subheading">Globale Visualisierung nach Ereignissen und Opferzahlen.</div>
       <div class="toggle-row mode-row" style="align-items: center;">
         <label class="label-sm" style="margin-right: 8px;">Modus:</label>
         <button id="mode3dBtn" type="button">3D</button>
@@ -53,8 +53,8 @@
 
       <div class="toggle-row metric-row mt-6" style="align-items: center;">
         <label class="label-sm" style="margin-right: 8px;">Metrik</label>
-        <button id="metricEventsBtn" type="button" disabled>Events</button>
-        <button id="metricFatalitiesBtn" type="button">Fatalities</button>
+        <button id="metricEventsBtn" type="button" disabled>Ereignisse</button>
+        <button id="metricFatalitiesBtn" type="button">Opferzahlen</button>
       </div>
       
       <div id="arResetContainer" class="toggle-row mt-6" style="display: none; justify-content: center;">
@@ -69,8 +69,9 @@
       <div id="legendScale"></div>
       <div id="legendRange" style="margin-top: 6px; font-variant-numeric: tabular-nums; font-size: 13px;">-</div>
       <div id="legend2DInfo" style="display: none; margin-top: 8px; font-size: 12px; color: #cbd5e1;">
-        <strong>2D-Ansicht:</strong> Partikelfarbe basiert auf der Anzahl der Todesopfer (Fatalities).<br>
-        <span style="color:#fcd34d;">Gelb</span> = <span id="legend2DMin">0</span> Opfer | <span style="color:#ef4444;">Rot</span> = <span id="legend2DMax">30+</span> Opfer
+        <strong>2D-Ansicht:</strong> Partikelfarbe basiert auf der Anzahl der Todesopfer.<br>
+        <span style="color:#fcd34d;">Gelb</span> = <span id="legend2DMin">0</span> Opfer | <span
+          style="color:#ef4444;">Rot</span> = <span id="legend2DMax">30+</span> Opfer
       </div>
     </div>
     <div class="year-control" id="yearControl">
